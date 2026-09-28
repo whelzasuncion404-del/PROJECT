@@ -1,0 +1,14 @@
+<ion-content [fullscreen]="true" class="admin-page">
+  <header class="admin-shell-header"><div class="admin-shell-bar"><a class="admin-brand" routerLink="/admin/dashboard">CSU Carig <span>|</span> Admin Portal</a><nav class="admin-nav"><a routerLink="/admin/dashboard">Dashboard</a><a routerLink="/admin/product">Product</a><a routerLink="/admin/necessities">Necessities</a><a routerLink="/admin/available">Available</a><a class="active" routerLink="/admin/inventory">Inventory</a></nav></div></header>
+  <main class="admin-page-content">
+    <section class="admin-hero"><p class="admin-eyebrow">Stock control</p><h1>Inventory Management</h1><p>Review, filter, and remove records from the operational catalog.</p></section>
+    <section class="admin-panel"><div class="admin-panel-heading"><div><p class="admin-eyebrow">Inventory views</p><h2>{{ filteredProducts.length }} matching records</h2></div><a routerLink="/admin/product">Add record</a></div>
+      <div class="inventory-tabs"><button type="button" [class.active]="activeTab === 'csuwide'" (click)="setTab('csuwide')">CSU-wide</button><button type="button" [class.active]="activeTab === 'college'" (click)="setTab('college')">College-specific</button><button type="button" [class.active]="activeTab === 'necessities'" (click)="setTab('necessities')">Necessities</button></div>
+      <div class="admin-list">
+        @for (product of filteredProducts; track product.title) {
+          <article class="admin-list-item"><div class="admin-list-item-main inventory-main">@if (product.image) {<img class="admin-thumb" [src]="product.image" [alt]="product.title" />}<div><strong>{{ product.title }}</strong><p>{{ product.college }} · {{ product.price }} · {{ stock(product) }} units</p><small>Sizes: {{ product.sizes | json }}</small></div></div><button class="admin-danger" type="button" (click)="deleteProduct(product)">Delete</button></article>
+        } @empty { <p class="admin-empty">No items found in this section.</p> }
+      </div>
+    </section>
+  </main>
+</ion-content>

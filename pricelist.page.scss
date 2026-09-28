@@ -1,0 +1,25 @@
+ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: var(--ion-background-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  h2 {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--ion-text-color);
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+}
+
+.price-tag {
+  font-size: 1.15rem;
+  font-weight: 700;
+}

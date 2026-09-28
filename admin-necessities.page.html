@@ -1,0 +1,20 @@
+<ion-content [fullscreen]="true" class="admin-page">
+  <header class="admin-shell-header"><div class="admin-shell-bar"><a class="admin-brand" routerLink="/admin/dashboard">CSU Carig <span>|</span> Admin Portal</a><nav class="admin-nav"><a routerLink="/admin/dashboard">Dashboard</a><a routerLink="/admin/product">Product</a><a class="active" routerLink="/admin/necessities">Necessities</a><a routerLink="/admin/available">Available</a><a routerLink="/admin/inventory">Inventory</a></nav></div></header>
+  <main class="admin-page-content">
+    <section class="admin-hero"><p class="admin-eyebrow">Campus essentials</p><h1>Upload Necessities</h1><p>Add food, drinks, school supplies, and daily essentials to the available catalog.</p></section>
+    <section class="admin-panel">
+      <div class="admin-panel-heading"><div><p class="admin-eyebrow">Necessity record</p><h2>Item details</h2></div></div>
+      <form (ngSubmit)="saveItem()">
+        <div class="admin-form-grid">
+          <div class="admin-form-group"><label for="itemTitle">Item name</label><input id="itemTitle" name="itemTitle" [(ngModel)]="item.title" required placeholder="Bottled mineral water" /></div>
+          <div class="admin-form-group"><label for="itemCategory">Category</label><select id="itemCategory" name="itemCategory" [(ngModel)]="item.college"><option>Food</option><option>Drink</option><option>School Supplies</option><option>Daily Essentials</option></select></div>
+          <div class="admin-form-group"><label for="itemPrice">Price</label><input id="itemPrice" name="itemPrice" [(ngModel)]="item.price" required placeholder="PHP 25.00" /></div>
+          <div class="admin-form-group"><label for="itemColors">Color or packaging</label><input id="itemColors" name="itemColors" [(ngModel)]="item.colors" placeholder="Transparent" /></div>
+          <div class="admin-form-group full"><label for="itemImage">Image URL</label><input id="itemImage" name="itemImage" [(ngModel)]="item.image" placeholder="https://example.com/item.jpg" /></div>
+        </div>
+        <div class="admin-form-group full" style="margin-top: 18px"><label>Available sizes and stock</label><div class="size-matrix"><label class="size-row" *ngFor="let size of sizes"><span><input type="checkbox" [checked]="selectedSizes[size] !== undefined" (change)="toggleSize(size)" /> {{ size }}</span><input *ngIf="selectedSizes[size] !== undefined" class="size-qty-input" type="number" min="0" [ngModel]="selectedSizes[size]" (ngModelChange)="selectedSizes[size] = $event" [name]="'necessity-' + size" /></label></div></div>
+        <div class="admin-actions"><button class="admin-button" type="submit">Save necessity</button><a class="admin-secondary" routerLink="/admin/available">View catalog</a></div>
+      </form>
+    </section>
+  </main>
+</ion-content>

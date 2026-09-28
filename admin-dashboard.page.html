@@ -1,0 +1,52 @@
+<ion-content [fullscreen]="true" class="admin-page">
+  <header class="admin-shell-header">
+    <div class="admin-shell-bar">
+      <a class="admin-brand" routerLink="/admin/dashboard">CSU Carig <span>|</span> Admin Portal</a>
+      <nav class="admin-nav" aria-label="Admin navigation">
+        <a class="active" routerLink="/admin/dashboard">Dashboard</a>
+        <a routerLink="/admin/product">Product</a>
+        <a routerLink="/admin/necessities">Necessities</a>
+        <a routerLink="/admin/available">Available</a>
+        <a routerLink="/admin/inventory">Inventory</a>
+        <button class="admin-logout" type="button" (click)="logout()">Log out</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="admin-page-content">
+    <section class="admin-hero">
+      <p class="admin-eyebrow">Administrator workspace</p>
+      <h1>Admin Control Panel</h1>
+      <p>Manage CSU-wide merchandise, department inventories, notices, and user login activity from one focused workspace.</p>
+    </section>
+
+    <section class="admin-stats" aria-label="System summary">
+      <article class="admin-stat"><span>Registered users</span><strong>{{ users.length }}</strong></article>
+      <article class="admin-stat"><span>Inventory records</span><strong>{{ products.length }}</strong></article>
+      <article class="admin-stat"><span>Published notices</span><strong>{{ notices.length }}</strong></article>
+    </section>
+
+    <section class="admin-panel">
+      <div class="admin-panel-heading">
+        <div><p class="admin-eyebrow">Access records</p><h2>User Login Monitor</h2></div>
+        <div class="admin-actions"><button class="admin-secondary" type="button" (click)="downloadLogs()">Download data</button><button class="admin-danger" type="button" (click)="clearLogs()">Clear history</button></div>
+      </div>
+      <div class="admin-list">
+        @for (log of logs; track log.time + log.user) {
+          <article class="admin-list-item"><div class="admin-list-item-main"><strong>{{ log.user }}</strong><p>{{ log.type || 'Student / regular user' }}</p></div><small>{{ log.time }}</small></article>
+        } @empty { <p class="admin-empty">No login records found yet.</p> }
+      </div>
+    </section>
+
+    <section class="admin-panel">
+      <div class="admin-panel-heading"><div><p class="admin-eyebrow">Published content</p><h2>Active notices</h2></div><a routerLink="/admin/product">Manage records</a></div>
+      <div class="admin-list">
+        @for (notice of notices; track notice.title; let index = $index) {
+          <article class="admin-list-item"><div class="admin-list-item-main"><strong>{{ notice.title }}</strong><p>{{ notice.linkText }}</p></div><div class="admin-actions"><a class="admin-secondary" [href]="notice.linkUrl" target="_blank" rel="noreferrer">Open</a><button class="admin-danger" type="button" (click)="deleteNotice(index)">Delete</button></div></article>
+        } @empty { <p class="admin-empty">No active notices found.</p> }
+      </div>
+    </section>
+  </main>
+
+  <footer class="admin-footer">Cagayan State University - Carig Campus · Management Information System Office</footer>
+</ion-content>

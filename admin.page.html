@@ -1,0 +1,214 @@
+<ion-content [fullscreen]="true" class="admin-page">
+  <header class="admin-header">
+    <div class="header-brand">CSU Carig <span>|</span> Admin Portal</div>
+    <nav class="admin-nav" aria-label="Admin navigation">
+      <button type="button" [class.active]="activeView === 'dashboard'" (click)="switchView('dashboard')">Dashboard</button>
+      <button type="button" [class.active]="activeView === 'add'" (click)="switchView('add')">Product</button>
+      <button type="button" [class.active]="activeView === 'necessities'" (click)="switchView('necessities')">Necessities</button>
+      <button type="button" [class.active]="activeView === 'available'" (click)="switchView('available')">Available</button>
+      <button type="button" [class.active]="activeView === 'inventory'" (click)="switchView('inventory')">Inventory</button>
+      <button type="button" class="logout-btn" (click)="logout()">Log out</button>
+    </nav>
+  </header>
+
+  <main class="dashboard-content">
+    <!-- DASHBOARD VIEW -->
+    @if (activeView === 'dashboard') {
+      <section class="welcome-banner">
+        <h1>Admin Control Panel</h1>
+        <p>Manage CSU-wide merchandise, department inventories, announcements, and user login activity.</p>
+      </section>
+
+      <section class="stats-grid" aria-label="System summary">
+        <article class="stat-card">
+          <span>Registered users</span>
+          <strong>{{ users.length }}</strong>
+        </article>
+        <article class="stat-card">
+          <span>Inventory records</span>
+          <strong>{{ productCount }}</strong>
+        </article>
+        <article class="stat-card">
+          <span>Published notices</span>
+          <strong>{{ noticeCount }}</strong>
+        </article>
+      </section>
+
+      <section class="section-box">
+        <div class="section-header">
+          <h2>User Login Monitor <span class="item-count-badge">{{ loginLogs.length }}</span></h2>
+          <div class="header-actions">
+            <button type="button" class="download-logs-btn" (click)="downloadLogs()">Download Data</button>
+            <button type="button" class="clear-logs-btn" (click)="clearLogs()">Clear History</button>
+          </div>
+        </div>
+        <div class="log-container-wrapper">
+          @if (loginLogs.length > 0) {
+            @for (log of loginLogs; track log.time + log.user) {
+              <div class="log-item">
+                <span><strong>User:</strong> {{ log.user }}</span>
+                <span class="log-time">{{ log.time }}</span>
+              </div>
+            }
+          } @else {
+            <p class="empty-state">No login records found yet.</p>
+          }
+        </div>
+      </section>
+
+      <section class="section-box">
+        <div class="section-header">
+          <h2>{{ editingNoticeIndex === null ? 'Add New Notice / Announcement' : 'Edit Notice / Announcement' }}</h2>
+        </div>
+        <form (ngSubmit)="saveNotice()">
+          <div class="form-group">
+            <label for="noticeTitle">Notice title</label>
+            <input id="noticeTitle" name="noticeTitle" [(ngModel)]="noticeForm.title" required />
+          </div>
+          <div class="form-group">
+            <label for="noticeText">Notice description</label>
+            <input id="noticeText" name="noticeText" [(ngModel)]="noticeForm.linkText" required />
+          </div>
+          <div class="form-group">
+            <label for="noticeUrl">Notice link URL</label>
+            <input id="noticeUrl" name="noticeUrl" [(ngModel)]="noticeForm.linkUrl" placeholder="https://..." />
+          </div>
+          <button class="save-btn" type="submit">{{ editingNoticeIndex === null ? 'Add Notice' : 'Update Notice' }}</button>
+          @if (editingNoticeIndex !== null) { 
+            <button class="cancel-edit-btn visible" type="button" (click)="editingNoticeIndex = null; noticeForm = { title: '', linkText: '', linkUrl: '' }">Cancel Edit</button> 
+          }
+        </form>
+      </section>
+
+      <section class="section-box">
+        <div class="section-header">
+          <h2>Active Notices <span class="item-count-badge">{{ noticeCount }}</span></h2>
+        </div>
+        @for (notice of notices; track notice.title; let index = $index) {
+          <article class="notice-admin-item">
+            <div class="notice-info">
+              <strong>{{ notice.title }}</strong>
+              <p>{{ notice.linkText }}</p>
+            </div>
+            <div class="notice-actions">
+              <button class="edit-notice-btn" type="button" (click)="editNotice(index)">Edit</button>
+              <button class="delete-btn" type="button" (click)="deleteNotice(index)">Delete</button>
+            </div>
+          </article>
+        } @empty { 
+          <p class="empty-state">No active notices found.</p> 
+        }
+      </section>
+    }
+
+    <!-- ADD PRODUCT / NECESSITY VIEW -->
+    @if (activeView === 'add' || activeView === 'necessities') {
+      <section class="section-box form-panel">
+        <div class="section-header">
+          <h2>{{ activeView === 'necessities' ? 'Upload Necessity' : 'Add New Product' }}</h2>
+        </div>
+        <form (ngSubmit)="saveProduct()">
+          <div class="form-group">
+            <label for="productTitle">{{ activeView === 'necessities' ? 'Item name' : 'Product name' }}</label>
+            <input id="productTitle" name="productTitle" [(ngModel)]="productForm.title" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="productCollege">{{ activeView === 'necessities' ? 'Necessity category' : 'Department assignment' }}</label>
+            <select id="productCollege" name="productCollege" [(ngModel)]="productForm.college">
+              @if (activeView === 'necessities') {
+                <option value="Food">Food / Meals</option>
+                <option value="Drink">Drinks / Beverages</option>
+                <option value="School Supplies">School Supplies</option>
+                <option value="Daily Essentials">Daily Essentials</option>
+              } @else {
+                <option value="General">CSU-wide</option>
+                <option value="CVM">CVM</option>
+                <option value="CICS">CICS</option>
+                <option value="CHK">CHK</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Available sizes and stock</label>
+            <div class="size-matrix-container">
+              @for (size of (activeView === 'necessities' ? necessitySizes : productSizes); track size) {
+                <label class="size-row">
+                  <span class="size-checkbox-label">
+                    <input type="checkbox" [checked]="selectedSizes[size] !== undefined" (change)="toggleSize(size)" /> {{ size }}
+                  </span>
+                  @if (selectedSizes[size] !== undefined) {
+                    <input class="size-qty-input" type="number" min="0" [ngModel]="selectedSizes[size]" (ngModelChange)="selectedSizes[size] = $event" [name]="'size-' + size" />
+                  }
+                </label>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productColors">Color options</label>
+            <input id="productColors" name="productColors" [(ngModel)]="productForm.colors" placeholder="Red, Blue, Black" />
+          </div>
+
+          <div class="form-group">
+            <label for="productPrice">Price</label>
+            <input id="productPrice" name="productPrice" [(ngModel)]="productForm.price" placeholder="PHP 750.00" required />
+          </div>
+
+          <div class="form-group">
+            <label for="productImage">Image URL</label>
+            <input id="productImage" name="productImage" [(ngModel)]="productForm.image" placeholder="https://..." />
+          </div>
+
+          <button class="save-btn" type="submit">{{ activeView === 'necessities' ? 'Add Necessity Item' : 'Add Product' }}</button>
+        </form>
+      </section>
+    }
+
+    <!-- AVAILABLE & INVENTORY VIEWS -->
+    @if (activeView === 'available' || activeView === 'inventory') {
+      <section class="section-box">
+        <div class="section-header">
+          <h2>
+            {{ activeView === 'available' ? 'Available Products Catalog' : 'Inventory Management' }} 
+            <span class="item-count-badge">{{ activeView === 'available' ? productCount : filteredProducts.length }}</span>
+          </h2>
+        </div>
+
+        @if (activeView === 'inventory') {
+          <div class="panel-tabs">
+            <button type="button" [class.active]="activeInventoryTab === 'csuwide'" (click)="switchInventoryTab('csuwide')">CSU-wide</button>
+            <button type="button" [class.active]="activeInventoryTab === 'college'" (click)="switchInventoryTab('college')">College-specific</button>
+            <button type="button" [class.active]="activeInventoryTab === 'necessities'" (click)="switchInventoryTab('necessities')">Necessities</button>
+          </div>
+        }
+
+        @if ((activeView === 'available' ? products : filteredProducts).length > 0) {
+          @for (product of (activeView === 'available' ? products : filteredProducts); track product.title) {
+            <article class="product-item">
+              <div class="product-info-wrapper">
+                @if (product.image) {
+                  <img [src]="product.image" class="admin-thumb" [alt]="product.title" />
+                }
+                <div class="product-info">
+                  <strong>{{ product.title }}</strong>
+                  <span class="tag">{{ product.college }}</span>
+                  <p>Price: <span>{{ product.price }}</span> | Total stock: {{ totalStock(product) }}</p>
+                  <small>Sizes: {{ product.sizes | json }}</small>
+                </div>
+              </div>
+              @if (activeView === 'inventory') {
+                <div class="action-buttons">
+                  <button class="delete-btn" type="button" (click)="deleteProduct(product)">Delete</button>
+                </div>
+              }
+            </article>
+          }
+        } @else { 
+          <p class="empty-state">No items found in this section.</p> 
+        }
+      </section>
+    }
+  </main>
+</ion-content>

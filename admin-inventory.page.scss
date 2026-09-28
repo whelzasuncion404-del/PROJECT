@@ -1,0 +1,8 @@
+@import '../admin/admin-theme';
+
+.inventory-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; padding-bottom: 11px; border-bottom: 1px solid var(--admin-line); }
+.inventory-tabs button { padding: 8px 12px; border: 0; border-radius: 4px; background: #eef0f2; color: #374151; font: inherit; font-size: 0.76rem; font-weight: 700; cursor: pointer; }
+.inventory-tabs button.active { background: var(--admin-red); color: #fff; }
+.inventory-main { display: flex; align-items: center; gap: 12px; }
+.inventory-main > div { min-width: 0; }
+@media (max-width: 520px) { .inventory-main { align-items: flex-start; } }

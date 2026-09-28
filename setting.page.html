@@ -1,0 +1,102 @@
+<ion-content [fullscreen]="true" class="setting-page">
+  <header class="setting-header">
+    <button type="button" class="back-btn" (click)="goToDashboard()" aria-label="Back to dashboard">&#8592;</button>
+    <div>
+      <p class="eyebrow">CSU Carig Business Office</p>
+      <h1>Settings</h1>
+    </div>
+  </header>
+
+  <nav class="main-nav" aria-label="Main navigation">
+    <a href="/dashboard">Overview</a>
+    <a href="/active-records">Active records</a>
+    <a href="/about">About</a>
+    <a href="/department">Departments</a>
+  </nav>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="/dashboard"><span aria-hidden="true">⌂</span><small>Overview</small></a>
+    <a href="/active-records"><span aria-hidden="true">▦</span><small>Records</small></a>
+    <a href="/about"><span aria-hidden="true">ⓘ</span><small>About</small></a>
+    <a href="/department"><span aria-hidden="true">▤</span><small>Departments</small></a>
+    <a class="active" routerLink="/setting">
+      @if (profilePicture) {
+        <img class="mobile-profile-avatar" [src]="profilePicture" alt="Profile" />
+      } @else {
+        <span aria-hidden="true">&#128100;</span>
+      }
+      <small>Profile</small>
+    </a>
+  </nav>
+
+  <main class="setting-content">
+    <section class="profile-card">
+      <div class="profile-heading">
+        @if (profilePicture) {
+          <img class="profile-large-avatar profile-photo" [src]="profilePicture" alt="Profile picture" />
+        } @else {
+          <div class="profile-large-avatar">{{ displayName.charAt(0).toUpperCase() }}</div>
+        }
+        <div>
+          <p class="eyebrow">My account</p>
+          <h2>{{ displayName || profileUsername }}</h2>
+          <p>Review the account details connected to your student access.</p>
+        </div>
+      </div>
+
+      <dl class="profile-details">
+        <div>
+          <dt>Username</dt>
+          <dd>{{ profileUsername }}</dd>
+        </div>
+        <div>
+          <dt>Gmail account</dt>
+          <dd>{{ profileEmail }}</dd>
+        </div>
+        <div>
+          <dt>Account type</dt>
+          <dd>CSU Carig student account</dd>
+        </div>
+      </dl>
+
+      <div class="profile-editor">
+        <div class="profile-editor-heading">
+          <div>
+            <p class="eyebrow">Edit profile</p>
+            <h3>Personal information</h3>
+          </div>
+          <label class="upload-picture-btn">
+            Choose picture
+            <input type="file" accept="image/*" (change)="onProfilePictureSelected($event)" />
+          </label>
+        </div>
+
+        <label class="field-label" for="displayName">Display name</label>
+        <input id="displayName" class="profile-input" type="text" [(ngModel)]="displayName" maxlength="60" />
+
+        <button type="button" class="save-profile-btn" (click)="saveProfile()">Save Profile</button>
+      </div>
+    </section>
+
+    <section class="settings-card">
+      <div>
+        <p class="eyebrow">Preferences</p>
+        <h2>Notification settings</h2>
+        <p>Choose whether you want to receive Business Office notice updates.</p>
+      </div>
+      <label class="toggle-row">
+        <span>Receive office notice updates</span>
+        <input type="checkbox" [(ngModel)]="showNotifications" />
+      </label>
+    </section>
+
+    <section class="settings-card account-actions">
+      <div>
+        <p class="eyebrow">Account access</p>
+        <h2>Leave this account</h2>
+        <p>Log out and return to the CSU Carig sign-in screen.</p>
+      </div>
+      <button type="button" class="logout-btn" (click)="logout()">Log out</button>
+    </section>
+  </main>
+</ion-content>

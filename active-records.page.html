@@ -1,0 +1,135 @@
+<ion-content [fullscreen]="true" class="active-records-page">
+  <header class="site-header">
+    <div class="utility-bar">
+      <a href="https://carig.csu.edu.ph" target="_blank" rel="noreferrer">CSU Carig Official Website</a>
+      <span>Student viewing portal</span>
+    </div>
+
+    <div class="header-main">
+      <div class="brand-block">
+        <img class="brand-mark" src="assets/icon/eagle.png" alt="CSU Carig eagle logo" />
+        <span class="brand-copy">CSU CARIG<br /><strong>Business Office</strong></span>
+      </div>
+      
+      <label class="search-box" for="productSearchInput">
+        <span aria-hidden="true">&#128269;</span>
+        <input
+          id="productSearchInput"
+          type="search"
+          [(ngModel)]="searchQuery"
+          placeholder="Search title, category, or type"
+          aria-label="Search active records"
+        />
+      </label>
+
+      <div class="header-actions">
+        <span class="status-badge"><span class="status-dot"></span> System active</span>
+        <a class="profile-btn" routerLink="/setting">
+          <span class="profile-avatar" aria-hidden="true">C</span>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="/dashboard">Overview</a>
+      <a class="active" href="/active-records">Active records</a>
+      <a href="/about">About</a>
+      <a href="/department">Departments</a>
+    </nav>
+  </header>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="/dashboard"><span aria-hidden="true">⌂</span><small>Overview</small></a>
+    <a class="active" href="/active-records"><span aria-hidden="true">▦</span><small>Records</small></a>
+    <a href="/about"><span aria-hidden="true">ⓘ</span><small>About</small></a>
+    <a href="/department"><span aria-hidden="true">▤</span><small>Departments</small></a>
+    <a routerLink="/setting"><span aria-hidden="true">&#128100;</span><small>Profile</small></a>
+  </nav>
+
+  <main class="records-content">
+    <section class="records-intro">
+      <div>
+        <p class="eyebrow">Student access</p>
+        <h1>Available products</h1>
+        <p>Browse verified items uploaded through the CSU Carig Business Office.</p>
+      </div>
+      <div class="count-badge"><strong>{{ filteredProducts.length }}</strong><span>active records</span></div>
+    </section>
+
+    <section class="records-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Live inventory</p>
+          <h2>Uploaded admin items</h2>
+        </div>
+        <span class="record-count">{{ filteredProducts.length }} results</span>
+      </div>
+
+      @if (filteredProducts.length > 0) {
+        <div class="product-list">
+          @for (product of filteredProducts; track product.title) {
+            <article class="product-item">
+              <button class="product-thumb-button" type="button" (click)="openProductModal(product)" [attr.aria-label]="'View details for ' + product.title">
+                @if (product.image) {
+                  <img class="product-thumb" [src]="product.image" [alt]="product.title" />
+                } @else {
+                  <span class="product-thumb file-thumb" aria-hidden="true">&#128196;</span>
+                }
+              </button>
+
+              <div class="product-info">
+                <h3>{{ product.title }}</h3>
+                <div class="tag-row">
+                  @if (product.college && product.college !== 'General') {
+                    <span class="college-tag">{{ product.college }}</span>
+                  }
+                  @if (isNecessity(product)) {
+                    <span class="necessity-tag">Necessity</span>
+                  }
+                </div>
+                <p class="product-meta">Price: <strong>{{ product.price }}</strong> <span>|</span> Stock: {{ totalStock(product) }}</p>
+              </div>
+
+              <button class="details-btn" type="button" (click)="openProductModal(product)">View details</button>
+            </article>
+          }
+        </div>
+      } @else {
+        <p class="empty-state">No matching uploaded items found.</p>
+      }
+    </section>
+  </main>
+
+  @if (selectedProduct) {
+    <div class="modal-overlay" role="presentation" (click)="closeProductModal()">
+      <section class="product-modal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle" (click)="$event.stopPropagation()">
+        <button class="modal-close" type="button" (click)="closeProductModal()" aria-label="Close product details">&times;</button>
+        @if (selectedProduct.image) {
+          <img class="modal-image" [src]="selectedProduct.image" [alt]="selectedProduct.title" />
+        } @else {
+          <div class="modal-placeholder" aria-hidden="true">&#128196;</div>
+        }
+        <p class="eyebrow">Record details</p>
+        <h2 id="productModalTitle">{{ selectedProduct.title }}</h2>
+        <dl class="modal-details">
+          <div><dt>Price</dt><dd>{{ selectedProduct.price }}</dd></div>
+          <div><dt>Available stock</dt><dd>{{ totalStock(selectedProduct) }}</dd></div>
+          <div><dt>College/category</dt><dd>{{ selectedProduct.college || 'General' }}</dd></div>
+        </dl>
+        @if (getProductSizes(selectedProduct).length > 0) {
+          <div class="size-list">
+            @for (size of getProductSizes(selectedProduct); track size) {
+              <span>{{ size }}</span>
+            }
+          </div>
+        }
+      </section>
+    </div>
+  }
+
+  <footer class="site-footer">
+    <span>&copy; 2026 Cagayan State University - Carig Campus</span>
+    <span>Maintained by Management Information System Office</span>
+  </footer>
+</ion-content>

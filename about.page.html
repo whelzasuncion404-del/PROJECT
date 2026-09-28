@@ -1,0 +1,105 @@
+<ion-content [fullscreen]="true" class="about-page">
+  <header class="site-header">
+    <div class="utility-bar">
+      <a href="https://carig.csu.edu.ph" target="_blank" rel="noreferrer">CSU Carig Official Website</a>
+      <span>Student viewing portal</span>
+    </div>
+
+    <div class="header-main">
+      <div class="brand-block">
+        <img class="brand-mark" src="assets/icon/eagle.png" alt="CSU Carig eagle logo" />
+        <span class="brand-copy">CSU CARIG<br /><strong>Business Office</strong></span>
+      </div>
+
+      <div class="header-actions">
+        <span class="status-badge"><span class="status-dot"></span> System active</span>
+        <a class="profile-btn" routerLink="/setting">
+          <span class="profile-avatar" aria-hidden="true">C</span>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="/dashboard">Overview</a>
+      <a href="/active-records">Active records</a>
+      <a class="active" href="/about">About</a>
+      <a href="/department">Departments</a>
+    </nav>
+  </header>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a routerLink="/dashboard"><span aria-hidden="true">⌂</span><small>Overview</small></a>
+    <a routerLink="/active-records"><span aria-hidden="true">▦</span><small>Records</small></a>
+    <a class="active" routerLink="/about"><span aria-hidden="true">ⓘ</span><small>About</small></a>
+    <a routerLink="/department"><span aria-hidden="true">▤</span><small>Departments</small></a>
+    <a routerLink="/setting"><span aria-hidden="true">&#128100;</span><small>Profile</small></a>
+  </nav>
+
+  <main class="about-content">
+    <section class="welcome-banner">
+      <div>
+        <p class="eyebrow">CSU Carig Campus</p>
+        <h1>About Agila Business Office E-Store</h1>
+        <p>Your streamlined marketplace platform for verified campus essentials and office services.</p>
+      </div>
+      <span class="office-status-pill">Storefront active</span>
+    </section>
+
+    <section class="promo-banner" aria-label="Platform status">
+      <div>
+        <h2>Fast, secure, and reliable campus shopping</h2>
+        <p>Experience seamless requisition, asset tracking, and transparent inventory updates online.</p>
+      </div>
+      <span class="verified-pill">Verified platform</span>
+    </section>
+
+    <section class="section-box">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Platform overview</p>
+          <h2>Built for the CSU Carig community</h2>
+        </div>
+      </div>
+      <p class="overview-copy">
+        The CSU Carig Agila Business Office framework combines a modern digital retail experience with institutional compliance. It provides clear stock visibility for official uniforms, merchandise, administrative supplies, and food and beverage concessions across campus.
+      </p>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">▦</span>
+          <div>
+            <h3>Real-time inventory tracking</h3>
+            <p>Keep supplies, uniforms, and merchandise counts visible from the office inventory.</p>
+          </div>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">✓</span>
+          <div>
+            <h3>Secure authorized access</h3>
+            <p>Support access levels tailored for students, personnel, and administrative staff.</p>
+          </div>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">⌕</span>
+          <div>
+            <h3>Quick navigation and search</h3>
+            <p>Find food and non-food essentials quickly through organized records and categories.</p>
+          </div>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">⌂</span>
+          <div>
+            <h3>Institutional integration</h3>
+            <p>Connect with CSU Carig networks, academic directories, and office announcements.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; 2026 Cagayan State University - Carig Campus</span>
+    <span>Maintained by Management Information System Office</span>
+  </footer>
+</ion-content>

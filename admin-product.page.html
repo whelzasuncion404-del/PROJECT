@@ -1,0 +1,20 @@
+<ion-content [fullscreen]="true" class="admin-page">
+  <header class="admin-shell-header"><div class="admin-shell-bar"><a class="admin-brand" routerLink="/admin/dashboard">CSU Carig <span>|</span> Admin Portal</a><nav class="admin-nav"><a routerLink="/admin/dashboard">Dashboard</a><a class="active" routerLink="/admin/product">Product</a><a routerLink="/admin/necessities">Necessities</a><a routerLink="/admin/available">Available</a><a routerLink="/admin/inventory">Inventory</a></nav></div></header>
+  <main class="admin-page-content">
+    <section class="admin-hero"><p class="admin-eyebrow">Catalog management</p><h1>Add New Product</h1><p>Create a CSU-wide or department-specific merchandise record with stock details and an optional image.</p></section>
+    <section class="admin-panel">
+      <div class="admin-panel-heading"><div><p class="admin-eyebrow">Product record</p><h2>Product details</h2></div></div>
+      <form (ngSubmit)="saveProduct()">
+        <div class="admin-form-grid">
+          <div class="admin-form-group"><label for="productTitle">Product name</label><input id="productTitle" name="productTitle" [(ngModel)]="product.title" required placeholder="Official CSU hoodie" /></div>
+          <div class="admin-form-group"><label for="productCollege">Department assignment</label><select id="productCollege" name="productCollege" [(ngModel)]="product.college"><option>General</option><option>CVM</option><option>COEA</option><option>CPAD</option><option>CNSM</option><option>CICS</option><option>CIT</option><option>CHSS</option><option>COM</option><option>COL</option><option>CHK</option></select></div>
+          <div class="admin-form-group"><label for="productPrice">Price</label><input id="productPrice" name="productPrice" [(ngModel)]="product.price" required placeholder="PHP 750.00" /></div>
+          <div class="admin-form-group"><label for="productColors">Color options</label><input id="productColors" name="productColors" [(ngModel)]="product.colors" placeholder="Black, Maroon" /></div>
+          <div class="admin-form-group full"><label for="productImage">Image URL</label><input id="productImage" name="productImage" [(ngModel)]="product.image" placeholder="https://example.com/product.jpg" /></div>
+        </div>
+        <div class="admin-form-group full" style="margin-top: 18px"><label>Available sizes and stock</label><div class="size-matrix"><label class="size-row" *ngFor="let size of sizes"><span><input type="checkbox" [checked]="selectedSizes[size] !== undefined" (change)="toggleSize(size)" /> {{ size }}</span><input *ngIf="selectedSizes[size] !== undefined" class="size-qty-input" type="number" min="0" [ngModel]="selectedSizes[size]" (ngModelChange)="selectedSizes[size] = $event" [name]="'quantity-' + size" /></label></div></div>
+        <div class="admin-actions"><button class="admin-button" type="submit">Save product</button><a class="admin-secondary" routerLink="/admin/inventory">View inventory</a></div>
+      </form>
+    </section>
+  </main>
+</ion-content>

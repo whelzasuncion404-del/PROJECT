@@ -1,0 +1,86 @@
+<ion-content [fullscreen]="true" class="cnsm-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-block" routerLink="/dashboard">
+        <img class="brand-mark" src="assets/icon/eagle.png" alt="CSU Carig eagle logo" />
+        <span class="brand-copy">CSU CARIG <span>|</span> <strong>CNSM Portal</strong></span>
+      </a>
+      <a class="back-btn" routerLink="/department" aria-label="Back to departments">
+        <span class="back-icon" aria-hidden="true">&#8592;</span>
+        <span class="back-label">Departments</span>
+      </a>
+    </div>
+  </header>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a routerLink="/dashboard"><span aria-hidden="true">⌂</span><small>Overview</small></a>
+    <a routerLink="/active-records"><span aria-hidden="true">▦</span><small>Records</small></a>
+    <a routerLink="/about"><span aria-hidden="true">ⓘ</span><small>About</small></a>
+    <a class="active" routerLink="/department"><span aria-hidden="true">▤</span><small>Departments</small></a>
+  </nav>
+
+  <main class="cnsm-content">
+    <section class="welcome-banner">
+      <span class="hero-bolt" aria-hidden="true">&#9889;</span>
+      <p class="eyebrow">College of Natural Science and Mathematics</p>
+      <h1>Welcome to the CNSM Portal</h1>
+      <p>View official department merchandise, laboratory apparel, scientific tools, and college-specific updates for CNSM students and faculty.</p>
+    </section>
+
+    <div class="dashboard-grid">
+      <div class="main-column">
+        <section class="panel">
+          <div class="section-heading">
+            <h2>CNSM Latest Updates</h2>
+            <span>Updated {{ currentDate }}</span>
+          </div>
+          <span class="announcement-label">CNSM announcements</span>
+          <p class="announcement-copy">Welcome to the College of Natural Science and Mathematics portal. Check the latest departmental apparel, laboratory equipment, and college-specific items designated exclusively for the CNSM community.</p>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h2>CNSM Products</h2>
+            <span>Exclusive items</span>
+          </div>
+
+          @if (products.length > 0) {
+            <div class="product-grid">
+              @for (product of products; track product.title) {
+                <article class="product-card">
+                  <div class="product-image">
+                    @if (product.image) {
+                      <img [src]="product.image" [alt]="product.title" />
+                    } @else {
+                      <span aria-hidden="true">CNSM Item</span>
+                    }
+                  </div>
+                  <h3>{{ product.title }}</h3>
+                  <strong>{{ product.price }}</strong>
+                  <span>Stock: {{ totalStock(product) }}</span>
+                </article>
+              }
+            </div>
+          } @else {
+            <p class="empty-state">No products uploaded for CNSM yet.</p>
+          }
+        </section>
+      </div>
+
+      <aside class="panel resources-panel">
+        <div class="section-heading">
+          <h2>Resources &amp; Services</h2>
+        </div>
+        <h3>CNSM services</h3>
+        <a routerLink="/active-records">CNSM merchandise catalog</a>
+        <a routerLink="/active-records">Laboratory coats &amp; science supplies</a>
+        <a routerLink="/department">Department reservation desk</a>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span align="center">&copy; 2026 Cagayan State University - Carig Campus</span>
+    <span align="center">Maintained by Management Information System Office</span>
+  </footer>
+</ion-content>

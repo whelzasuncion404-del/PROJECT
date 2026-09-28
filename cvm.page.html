@@ -1,0 +1,126 @@
+<ion-content [fullscreen]="true" class="cvm-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-block" routerLink="/dashboard">
+        <img class="brand-mark" src="assets/icon/eagle.png" alt="CSU Carig eagle logo" />
+        <span class="brand-copy">CSU CARIG <span>|</span> <strong>CVM Portal</strong></span>
+      </a>
+      <a class="back-btn" routerLink="/department" aria-label="Back to departments">
+        <span class="back-icon" aria-hidden="true">&#8592;</span>
+        <span class="back-label">Departments</span>
+      </a>
+    </div>
+  </header>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a routerLink="/dashboard"><span aria-hidden="true">⌂</span><small>Overview</small></a>
+    <a routerLink="/active-records"><span aria-hidden="true">▦</span><small>Records</small></a>
+    <a routerLink="/about"><span aria-hidden="true">ⓘ</span><small>About</small></a>
+    <a class="active" routerLink="/department"><span aria-hidden="true">▤</span><small>Departments</small></a>
+  </nav>
+
+  <main class="cvm-content">
+    <section class="welcome-banner">
+      <span class="hero-bolt" aria-hidden="true">&#9889;</span>
+      <p class="eyebrow">College of Veterinary Medicine</p>
+      <h1>Welcome to the CVM Portal</h1>
+      <p>View official department merchandise, lab apparel, and college-specific updates for CVM students and faculty.</p>
+    </section>
+
+    <div class="dashboard-grid">
+      <div class="main-column">
+        <section class="panel">
+          <div class="section-heading">
+            <h2>CVM Latest Updates</h2>
+            <span>Updated {{ currentDate }}</span>
+          </div>
+          <span class="announcement-label">CVM announcements</span>
+          <p class="announcement-copy">Welcome to the College of Veterinary Medicine portal. Check the latest departmental apparel, supplies, and college-specific items designated exclusively for the CVM community.</p>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <h2>CVM Products</h2>
+            <span>Exclusive items</span>
+          </div>
+
+          @if (cvmProducts.length > 0) {
+            <div class="product-grid">
+              @for (product of cvmProducts; track product.title) {
+                <article class="product-card" (click)="openProductDetails(product)" style="cursor: pointer;">
+                  <div class="product-image">
+                    @if (product.image) {
+                      <img [src]="product.image" [alt]="product.title" />
+                    } @else {
+                      <span aria-hidden="true">CVM Item</span>
+                    }
+                  </div>
+                  <h3>{{ product.title }}</h3>
+                  <strong>{{ product.price }}</strong>
+                  <span>Stock: {{ totalStock(product) }}</span>
+                </article>
+              }
+            </div>
+          } @else {
+            <p class="empty-state">No products uploaded for CVM yet.</p>
+          }
+        </section>
+      </div>
+
+      <aside class="panel resources-panel">
+        <div class="section-heading">
+          <h2>Resources &amp; Services</h2>
+        </div>
+        <h3>CVM services</h3>
+        <a routerLink="/active-records">CVM merchandise catalog</a>
+        <a routerLink="/active-records">Official uniform and lab apparel</a>
+        <a routerLink="/department">Department reservation desk</a>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Product Details Popup Modal -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeProductDetails()">
+    <ng-template>
+      <div style="padding: 24px; height: 100%; overflow-y: auto; background: var(--ion-background-color, #fff);">
+        @if (selectedProduct) {
+          <div style="text-align: center; margin-bottom: 20px;">
+            @if (selectedProduct.image) {
+              <img [src]="selectedProduct.image" [alt]="selectedProduct.title" style="max-height: 220px; width: 100%; border-radius: 12px; object-fit: cover;" />
+            } @else {
+              <span style="font-size: 64px;" aria-hidden="true">&#128196;</span>
+            }
+          </div>
+          <p style="color: var(--ion-color-primary, #702082); font-weight: bold; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 4px;">{{ selectedProduct.college }}</p>
+          <h2 style="margin: 0 0 10px 0; font-size: 1.5rem; font-weight: bold;">{{ selectedProduct.title }}</h2>
+          <p style="font-size: 1.3rem; font-weight: bold; color: var(--ion-color-dark, #222); margin-bottom: 20px;">{{ selectedProduct.price }}</p>
+          
+          <div style="background: rgba(0,0,0,0.04); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; font-size: 1.05rem;">Inventory Details:</p>
+            <p style="margin: 0 0 8px 0;"><strong>Total Available Stock:</strong> {{ totalStock(selectedProduct) }}</p>
+            
+            @if (selectedProduct.type) {
+              <p style="margin: 0 0 8px 0;"><strong>Item Type:</strong> {{ selectedProduct.type }}</p>
+            }
+
+            @if (selectedProduct.sizes) {
+              <p style="margin: 12px 0 6px 0; font-weight: bold;">Sizes Breakdown:</p>
+              <ul style="margin: 0; padding-left: 20px;">
+                @for (sizeEntry of selectedProduct.sizes | keyvalue; track sizeEntry.key) {
+                  <li style="margin-bottom: 4px;">Size <strong>{{ sizeEntry.key }}</strong>: {{ sizeEntry.value }} units</li>
+                }
+              </ul>
+            }
+          </div>
+
+          <ion-button expand="block" color="medium" (click)="closeProductDetails()">Close</ion-button>
+        }
+      </div>
+    </ng-template>
+  </ion-modal>
+
+  <footer class="site-footer">
+    <span align="center">&copy; 2026 Cagayan State University - Carig Campus</span>
+    <span align="center">Maintained by Management Information System Office</span>
+  </footer>
+</ion-content>

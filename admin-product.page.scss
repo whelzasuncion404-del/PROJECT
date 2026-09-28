@@ -1,0 +1,28 @@
+@import '../admin/admin-theme';
+
+.size-matrix {
+  padding: 10px 12px;
+  border: 1px solid var(--admin-line);
+  border-radius: 5px;
+  background: #fafafa;
+}
+
+.size-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  color: var(--admin-ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.size-row:last-child { border-bottom: 0; }
+.size-qty-input { width: 110px; padding: 7px; border: 1px solid #d8dce1; border-radius: 4px; }
+
+@media (max-width: 520px) {
+  .size-row { align-items: flex-start; flex-direction: column; }
+  .size-qty-input { width: 100%; }
+}

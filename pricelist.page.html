@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Master Catalog & Price List</ion-title>
+  </ion-toolbar>
+  
+  <ion-toolbar>
+    <ion-searchbar 
+      [value]="searchTerm" 
+      (ionInput)="searchTerm = $any($event).target.value; filterItems()" 
+      placeholder="Search items, category, or price..."
+      showClearButton="always">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list lines="full">
+    @for (item of filteredItems; track item.id || item.name) {
+      <ion-item>
+        <ion-label>
+          <h2>{{ item.name }}</h2>
+          <p>Category: {{ item.category }}</p>
+        </ion-label>
+        <ion-note slot="end" color="success" class="price-tag">
+          ${{ item.price | number:'1.2-2' }}
+        </ion-note>
+      </ion-item>
+    } @empty {
+      <div class="ion-text-center ion-padding">
+        <p>No matching inventory items found.</p>
+      </div>
+    }
+  </ion-list>
+</ion-content>

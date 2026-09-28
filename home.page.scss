@@ -1,0 +1,486 @@
+:host {
+  --primary: #c62828;
+  --primary-hover: #e53935;
+  --secondary: #8e0000;
+  --accent-red: #d32f2f;
+  --bg-light: #ffffff;
+  --text-main: #1f1f1f;
+  --text-muted: #5f6368;
+  --border-color: rgba(198, 40, 40, 0.2);
+  --radius: 20px;
+  --shadow-glow: 0 0 60px rgba(198, 40, 40, 0.15);
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg-light);
+}
+
+.home-page {
+  --background: var(--bg-light);
+  --ion-background-color: var(--bg-light);
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 70% 20%, #ffffff 0%, #fafafa 45%, #f1f1f1 100%);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* --- Soft red light waves --- */
+.container::before {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(ellipse at 25% 35%, rgba(211, 47, 47, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 65%, rgba(183, 28, 28, 0.08) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.4) 15%, rgba(198, 40, 40, 0.06) 45%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(45px);
+  animation: waveShift 14s infinite alternate ease-in-out;
+}
+
+@keyframes waveShift {
+  0% { transform: translateY(-20px) rotate(0deg) scale(1); }
+  100% { transform: translateY(20px) rotate(3deg) scale(1.05); }
+}
+
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
+  visibility: visible;
+}
+
+.splash-screen.hidden {
+  opacity: 0;
+  transform: scale(1.05);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.eagle-container {
+  cursor: pointer;
+  text-align: center;
+  transition: var(--transition);
+  width: min(100%, 520px);
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eagle-container:hover {
+  transform: none;
+}
+
+.logo-emblem-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+  min-height: 360px;
+  justify-content: center;
+}
+
+/* Red Diamond Background Layer - Centered Behind Eagle, in front of Wings */
+.logo-emblem-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(65vw, 240px);
+  height: min(65vw, 240px);
+  background: linear-gradient(135deg, rgba(211, 47, 47, 0.15) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border: 2px solid rgba(198, 40, 40, 0.45);
+  border-radius: 24px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 35px rgba(198, 40, 40, 0.18), inset 0 0 25px rgba(255, 255, 255, 0.6);
+  z-index: 1;
+  pointer-events: none;
+  animation: diamondPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes diamondPulse {
+  0% {
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+    box-shadow: 0 0 35px rgba(198, 40, 40, 0.18), inset 0 0 25px rgba(255, 255, 255, 0.6);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(45deg) scale(1.05);
+    box-shadow: 0 0 45px rgba(198, 40, 40, 0.3), inset 0 0 35px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Torch positioned higher above the Eagle */
+.logo-torch-top {
+  font-size: clamp(0.9rem, 3vw, 1rem);
+  line-height: normal;
+  margin-bottom: -12px;
+  z-index: 3;
+  filter: drop-shadow(0 0 12px rgba(211, 47, 47, 0.65)) drop-shadow(0 0 25px rgba(198, 40, 40, 0.4));
+  animation: torchFlicker 2s infinite alternate ease-in-out;
+}
+
+@keyframes torchFlicker {
+  0% { transform: translateY(0) scale(0.98); opacity: 0.9; }
+  100% { transform: translateY(-4px) scale(1.05); opacity: 1; }
+}
+
+.eagle-image {
+  display: block;
+  max-width: 230px;
+  width: 50vw;
+  height: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 20px 35px rgba(198, 40, 40, 0.3));
+  position: relative;
+  z-index: 2;
+}
+
+.click-hint {
+  margin-top: 10px;
+  color: var(--secondary);
+  font-size: clamp(0.8rem, 1vw, 1rem);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(198, 40, 40, 0.2);
+  animation: pulse 2s infinite;
+  position: relative;
+  z-index: 2;
+}
+
+/* Glowing Accent Lines beside Click Hint */
+.click-hint::before,
+.click-hint::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-red));
+}
+.click-hint::before { right: 110%; }
+.click-hint::after { left: 110%; transform: rotate(180deg); }
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; color: var(--accent-red); }
+  100% { opacity: 0.6; }
+}
+
+.login-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: max(24px, env(safe-area-inset-top)) clamp(16px, 5vw, 70px) max(24px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.6s ease, visibility 0.6s;
+  z-index: 5;
+}
+
+.login-screen.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* --- REMOVED THE BOX CONTAINER ON LOGIN CARD --- */
+.login-card {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: clamp(10px, 2vw, 20px);
+  margin: auto;
+  width: 100%;
+  max-width: 440px;
+  transform: translateY(20px) scale(0.97);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  position: relative;
+  z-index: 6;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.login-card::before {
+  display: none;
+}
+
+.login-screen.active .login-card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.login-eagle-logo {
+  display: block;
+  width: 86px;
+  height: auto;
+  margin: 0 auto 18px;
+  filter: drop-shadow(0 10px 20px rgba(198, 40, 40, 0.3));
+}
+
+.login-card h2 {
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, #c62828 0%, #e53935 50%, #8e0000 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.login-helper-text {
+  margin: 0 0 18px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.google-btn,
+.secondary-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.google-btn {
+  background: #ffffff;
+  border: 2px solid rgba(198, 40, 40, 0.25);
+  color: var(--secondary);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+.google-btn:hover {
+  background: rgba(198, 40, 40, 0.06);
+  border-color: rgba(198, 40, 40, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(198, 40, 40, 0.18);
+}
+
+.otp-box {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(198, 40, 40, 0.07);
+  border: 1px solid rgba(198, 40, 40, 0.3);
+  color: var(--secondary);
+  font-size: 0.95rem;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+.otp-box strong {
+  color: var(--primary);
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(198, 40, 40, 0.2);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  outline: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-main);
+  transition: var(--transition);
+}
+
+.input-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.15);
+  background: #ffffff;
+}
+
+.login-btn {
+  width: 100%;
+  display: block;
+  padding: 14px;
+  background: linear-gradient(135deg, #c62828 0%, #8e0000 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 6px 20px rgba(198, 40, 40, 0.35);
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(229, 57, 53, 0.45);
+}
+
+.login-card > .google-btn {
+  display: block;
+  margin-top: 10px;
+}
+
+.back-link {
+  display: block;
+  text-align: center;
+  margin-top: 22px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.back-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.error-message {
+  color: #8e0000;
+  background-color: rgba(198, 40, 40, 0.08);
+  border: 1px solid rgba(198, 40, 40, 0.35);
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-bottom: 20px;
+  display: none;
+  font-weight: 600;
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 480px) {
+  .login-screen {
+    align-items: flex-start;
+    padding: 20px 12px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .login-card {
+    max-width: 100%;
+  }
+
+  .click-hint {
+    max-width: 290px;
+    margin-inline: auto;
+    letter-spacing: 2px;
+    line-height: 1.35;
+  }
+
+  .login-eagle-logo {
+    width: 68px;
+  }
+
+  .eagle-image {
+    width: min(80vw, 300px);
+  }
+
+  .input-group {
+    margin-bottom: 16px;
+  }
+
+  .input-group input,
+  .login-btn,
+  .google-btn {
+    min-height: 48px;
+  }
+}
+
+@media (max-height: 640px) and (max-width: 700px) {
+  .login-screen {
+    align-items: flex-start;
+  }
+
+  .login-card {
+    margin-block: 8px;
+  }
+
+  .login-eagle-logo {
+    width: 58px;
+    margin-bottom: 10px;
+  }
+
+  .login-card h2 {
+    margin-bottom: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .container::before,
+  .click-hint,
+  .logo-emblem-wrapper::before,
+  .logo-emblem-wrapper::after,
+  .logo-torch-top {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+.terms-text {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 16px;
+  margin-bottom: 0;
+  line-height: 1.4;
+  opacity: 0.8;
+}

@@ -1,0 +1,203 @@
+<ion-content [fullscreen]="true" class="home-page">
+  <div class="container">
+    <!-- Drifting Autumn Leaves Particles -->
+
+    <div class="splash-screen" [class.hidden]="!showSplash">
+      <div class="eagle-container" (click)="openLogin()">
+        <!-- Logo Emblem Wrapper with Wings Background, Red Diamond, and Steady Eagle -->
+        <div class="logo-emblem-wrapper">
+          <img
+            src="assets/icon/eagle.png"
+            alt="CSU Carig eagle logo"
+            class="eagle-image"
+          />
+        </div>
+        <div class="click-hint">CSU-Carig Business Office</div>
+      </div>
+    </div>
+
+    <div class="login-screen" [class.active]="showLogin">
+      <div class="login-card">
+        <img
+          src="assets/icon/eagle.png"
+          alt="CSU Carig eagle logo"
+          class="login-eagle-logo"
+        />
+
+        @if (authStep === 'choice') {
+          <h2>WELCOME CARIGANS</h2>
+
+          <p class="login-helper-text">Choose how you want to continue.</p>
+
+          <button id="loginChoiceBtn" type="button" class="login-btn" (click)="chooseLogin()">
+            Log In
+          </button>
+
+          <button type="button" class="google-btn" (click)="chooseSignIn()">
+            Sign In
+          </button>
+          <div>
+            <!-- Terms and conditions text added here -->
+            <p class="terms-text">
+              By clicking it, you agree to our terms and conditions.
+            </p>
+          </div>
+        }
+
+        @if (authStep === 'google') {
+          <h2>Register Gmail</h2>
+
+          @if (hasError) {
+            <div class="error-message">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div class="input-group">
+            <label for="googleEmail">Gmail Account</label>
+            <input
+              id="googleEmail"
+              type="email"
+              placeholder="yourname@gmail.com"
+              [(ngModel)]="googleEmail"
+              name="googleEmail"
+            />
+          </div>
+
+          <button id="googleSignInBtn" type="button" class="google-btn" (click)="continueWithGoogle()">
+            Continue to Account Details
+          </button>
+        }
+
+        @if (authStep === 'register') {
+          <h2>Complete Registration</h2>
+
+          @if (hasError) {
+            <div class="error-message">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <form (ngSubmit)="register($event)">
+            <div class="input-group">
+              <label for="registerUsername">Preferred Username</label>
+              <input
+                id="registerUsername"
+                type="text"
+                inputmode="numeric"
+                maxlength="8"
+                placeholder="00-00000"
+                pattern="\d{2}-\d{5}"
+                [(ngModel)]="username"
+                name="registerUsername"
+                (input)="username = formatUsername($any($event.target).value)"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="registerPassword">Account Password</label>
+              <input
+                id="registerPassword"
+                type="password"
+                placeholder="Create a password"
+                [(ngModel)]="password"
+                name="registerPassword"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                placeholder="Re-enter password"
+                [(ngModel)]="confirmPassword"
+                name="confirmPassword"
+              />
+            </div>
+
+            <button type="submit" class="login-btn">Create Account</button>
+          </form>
+        }
+
+        @if (authStep === 'otp') {
+          <h2>One-Time PIN</h2>
+
+          @if (hasError) {
+            <div class="error-message">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div class="otp-box">
+            Your one-time PIN is:
+            <strong class="visible-otp">{{ generatedOtp }}</strong>
+            <span>Use this code to finish creating your account.</span>
+          </div>
+
+          <form (ngSubmit)="verifyOtp($event)">
+            <div class="input-group">
+              <label for="otpInput">Enter One-Time Pin</label>
+              <input
+                id="otpInput"
+                type="text"
+                maxlength="6"
+                inputmode="numeric"
+                placeholder="123456"
+                [(ngModel)]="otpInput"
+                name="otpInput"
+              />
+            </div>
+
+            <button type="submit" class="login-btn">Verify PIN</button>
+          </form>
+        }
+
+        @if (authStep === 'login') {
+          <h2>WELCOME CARIGANS</h2>
+
+          <p class="login-helper-text">Already signed in? Use your username and password to continue.</p>
+
+          @if (hasError) {
+            <div class="error-message">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <form (ngSubmit)="login($event)">
+            <div class="input-group">
+              <label for="username">Username</label>
+              <input
+                #usernameInput
+                id="username"
+                type="text"
+                required
+                autocomplete="username"
+                placeholder="00-00000"
+                [(ngModel)]="username"
+                name="username"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                required
+                autocomplete="current-password"
+                [(ngModel)]="password"
+                name="password"
+              />
+            </div>
+
+            <button type="submit" class="login-btn">Log In</button>
+          </form>
+        }
+
+
+        <a href="#" class="back-link" (click)="goBack($event)">Back</a>
+      </div>
+    </div>
+  </div>
+</ion-content>

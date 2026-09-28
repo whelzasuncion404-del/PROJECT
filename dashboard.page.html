@@ -1,0 +1,219 @@
+<ion-content [fullscreen]="true" class="dashboard-page">
+  <header class="site-header">
+    <div class="utility-bar">
+      <a href="https://carig.csu.edu.ph" target="_blank" rel="noreferrer">CSU Carig Official Website</a>
+      <span>Student viewing portal</span>
+    </div>
+
+    <div class="header-main">
+      <div class="brand-block">
+        <img class="brand-mark" src="assets/icon/eagle.png" alt="CSU Carig eagle logo" />
+        <span class="brand-copy">CSU CARIG<br /><strong>Business Office</strong></span>
+      </div>
+
+      <div class="search-box" [class.mobile-search-open]="searchOpen">
+        <button
+          class="search-toggle"
+          type="button"
+          (click)="toggleSearch()"
+          [attr.aria-expanded]="searchOpen"
+          aria-label="Toggle search"
+        >
+          <span aria-hidden="true">&#128269;</span>
+        </button>
+        <input
+          id="dashboardSearch"
+          type="search"
+          [(ngModel)]="searchQuery"
+          placeholder="Search records or inventory"
+          aria-label="Search records or inventory"
+        />
+      </div>
+
+      <div class="header-actions">
+        <span class="status-badge"><span class="status-dot"></span> System active</span>
+        <a class="profile-btn" routerLink="/setting">
+          @if (profilePicture) {
+            <img class="profile-avatar profile-avatar-image" [src]="profilePicture" alt="Profile picture" />
+          } @else {
+            <span class="profile-avatar" aria-hidden="true">C</span>
+          }
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="active" href="/dashboard">Overview</a>
+      <a href="/active-records">Active records</a>
+      <a href="/about">About</a>
+      <a href="/department">Departments</a>
+    </nav>
+  </header>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a class="active" href="/dashboard"><span aria-hidden="true">⌂</span><small>Overview</small></a>
+    <a href="/active-records"><span aria-hidden="true">▦</span><small>Records</small></a>
+    <a href="/about"><span aria-hidden="true">ⓘ</span><small>About</small></a>
+    <a href="/department"><span aria-hidden="true">▤</span><small>Departments</small></a>
+    <a routerLink="/setting" aria-label="Open settings">
+      @if (profilePicture) {
+        <img class="mobile-profile-avatar" [src]="profilePicture" alt="Profile" />
+      } @else {
+        <span aria-hidden="true">&#9881;</span>
+      }
+      <small>Settings</small>
+    </a>
+  </nav>
+
+  <main class="dashboard-content">
+    <section class="welcome-banner">
+      <div>
+        <p class="eyebrow">CSU Carig student portal</p>
+        <h1>Welcome to the Business Office</h1>
+        <p class="welcome-copy">Find verified campus records, supplies, and announcements in one place.</p>
+      </div>
+    </section>
+
+    <section class="feature-panel" aria-label="Featured updates">
+      <button class="carousel-btn previous" type="button" (click)="showSlide(currentSlide - 1)" aria-label="Previous update">&#8249;</button>
+      <div class="feature-content">
+        <p class="eyebrow">{{ currentSlideData.label }}</p>
+        <h2>{{ currentSlideData.title }}</h2>
+        <p>{{ currentSlideData.text }}</p>
+        <span class="feature-note">{{ currentSlideData.accent }}</span>
+      </div>
+      <div class="feature-side" aria-hidden="true">
+        <span class="feature-number">0{{ currentSlide + 1 }}</span>
+        <span>of 0{{ slides.length }}</span>
+      </div>
+      <button class="carousel-btn next" type="button" (click)="showSlide(currentSlide + 1)" aria-label="Next update">&#8250;</button>
+    </section>
+
+    <div class="slide-dots" aria-label="Choose featured update">
+      @for (slide of slides; track slide.title; let index = $index) {
+        <button
+          type="button"
+          [class.active]="currentSlide === index"
+          (click)="showSlide(index)"
+          [attr.aria-label]="'Show update ' + (index + 1)"
+        ></button>
+      }
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="main-column">
+        <section id="records" class="section-box">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Browse</p>
+              <h2>Office record inventory</h2>
+            </div>
+            <span class="date-label">Updated {{ currentDate }}</span>
+          </div>
+
+          @if (filteredProducts.length > 0) {
+            <div class="product-grid">
+              @for (product of filteredProducts; track product.title) {
+                <article class="product-card" (click)="openProductDetails(product)" style="cursor: pointer;">
+                  <div class="product-image">
+                    @if (product.image) {
+                      <img [src]="product.image" [alt]="product.title" />
+                    } @else {
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                    }
+                    <span class="verified-tag">Verified</span>
+                  </div>
+                  <div class="product-info">
+                    <p class="product-category">{{ product.college }}</p>
+                    <h3>{{ product.title }}</h3>
+                    <div class="product-meta">
+                      <strong>{{ product.price }}</strong>
+                      <span>{{ totalStock(product) }} available</span>
+                    </div>
+                  </div>
+                </article>
+              }
+            </div>
+          } @else {
+            <p class="empty-state">No matching inventory records found.</p>
+          }
+        </section>
+      </div>
+
+      <aside class="sidebar-column">
+        <section id="notices" class="section-box">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">Stay informed</p>
+              <h2>Notice board</h2>
+            </div>
+          </div>
+          <div class="notice-list">
+            @for (notice of notices; track notice.title) {
+              <article class="notice-item">
+                <span class="notice-dot"></span>
+                <div>
+                  <p>{{ notice.title }}</p>
+                  <a [href]="notice.linkUrl" target="_blank" rel="noreferrer">{{ notice.linkText }}</a>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section id="directory" class="section-box directory-box">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">Need help?</p>
+              <h2>Quick directory</h2>
+            </div>
+          </div>
+          <a href="https://carig.csu.edu.ph" target="_blank" rel="noreferrer">CSU Carig official website <span>&#8599;</span></a>
+          <a routerLink="/pricelist">Master catalog and price list <span>&#8594;</span></a>
+          <a href="#notices">Uniform requisition updates <span>&#8594;</span></a>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Product Details Popup Modal -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeProductDetails()">
+    <ng-template>
+      <div style="padding: 24px; height: 100%; overflow-y: auto; background: var(--ion-background-color, #fff);">
+        @if (selectedProduct) {
+          <div style="text-align: center; margin-bottom: 20px;">
+            @if (selectedProduct.image) {
+              <img [src]="selectedProduct.image" [alt]="selectedProduct.title" style="max-height: 220px; width: 100%; border-radius: 12px; object-fit: cover;" />
+            } @else {
+              <span style="font-size: 64px;" aria-hidden="true">&#128196;</span>
+            }
+          </div>
+          <p class="eyebrow" style="color: var(--ion-color-primary, #702082); font-weight: bold; text-transform: uppercase;">{{ selectedProduct.college }}</p>
+          <h2 style="margin: 5px 0 10px 0; font-size: 1.5rem;">{{ selectedProduct.title }}</h2>
+          <p style="font-size: 1.3rem; font-weight: bold; color: var(--ion-color-dark, #222); margin-bottom: 20px;">{{ selectedProduct.price }}</p>
+          
+          <div style="background: rgba(0,0,0,0.04); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; font-size: 1.05rem;">Inventory Details:</p>
+            <p style="margin: 0 0 8px 0;"><strong>Total Available Stock:</strong> {{ totalStock(selectedProduct) }}</p>
+            
+            @if (selectedProduct.type) {
+              <p style="margin: 0 0 8px 0;"><strong>Item Type:</strong> {{ selectedProduct.type }}</p>
+            }
+
+            @if (selectedProduct.sizes) {
+              <p style="margin: 12px 0 6px 0; font-weight: bold;">Sizes Breakdown:</p>
+              <ul style="margin: 0; padding-left: 20px;">
+                @for (sizeEntry of selectedProduct.sizes | keyvalue; track sizeEntry.key) {
+                  <li style="margin-bottom: 4px;">Size <strong>{{ sizeEntry.key }}</strong>: {{ sizeEntry.value }} units</li>
+                }
+              </ul>
+            }
+          </div>
+
+          <ion-button expand="block" color="medium" (click)="closeProductDetails()">Close</ion-button>
+        }
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

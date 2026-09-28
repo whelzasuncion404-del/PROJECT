@@ -1,0 +1,135 @@
+<ion-content [fullscreen]="true" class="department-page">
+  <header class="site-header">
+    <div class="utility-bar">
+      <a href="https://carig.csu.edu.ph" target="_blank" rel="noreferrer">CSU Carig Official Website</a>
+      <span>Student viewing portal</span>
+    </div>
+
+    <div class="header-main">
+      <div class="brand-block">
+        <img class="brand-mark" src="assets/icon/eagle.png" alt="CSU Carig eagle logo" />
+        <span class="brand-copy">CSU CARIG<br /><strong>Business Office</strong></span>
+      </div>
+
+      <label class="search-box" for="departmentSearch">
+        <span aria-hidden="true">&#128269;</span>
+        <input
+          id="departmentSearch"
+          type="search"
+          [(ngModel)]="searchQuery"
+          placeholder="Search colleges or departments"
+          aria-label="Search colleges or departments"
+        />
+      </label>
+
+      <div class="header-actions">
+        <span class="status-badge"><span class="status-dot"></span> System active</span>
+        <a class="profile-btn" routerLink="/setting">
+          <span class="profile-avatar" aria-hidden="true">C</span>
+          <span>Profile</span>
+        </a>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="/dashboard">Overview</a>
+      <a href="/active-records">Active records</a>
+      <a href="/about">About</a>
+      <a class="active" href="/department">Departments</a>
+    </nav>
+  </header>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="/dashboard"><span aria-hidden="true">⌂</span><small>Overview</small></a>
+    <a href="/active-records"><span aria-hidden="true">▦</span><small>Records</small></a>
+    <a href="/about"><span aria-hidden="true">ⓘ</span><small>About</small></a>
+    <a class="active" href="/department"><span aria-hidden="true">▤</span><small>Departments</small></a>
+    <a routerLink="/setting"><span aria-hidden="true">&#128100;</span><small>Profile</small></a>
+  </nav>
+
+  <main class="department-content">
+    <section class="department-intro">
+      <div>
+        <p class="eyebrow">CSU Carig Campus</p>
+        <h1>Colleges Directory</h1>
+        <p>Browse the colleges and academic units connected to the Business Office.</p>
+      </div>
+      <div class="directory-count">
+        <strong>{{ filteredDepartments.length }}</strong>
+        <span>departments</span>
+      </div>
+    </section>
+
+    <section class="stats-grid" aria-label="Directory statistics">
+      <article class="stat-card">
+        <span class="stat-icon" aria-hidden="true">&#9632;</span>
+        <div><h2>Total products</h2><strong>{{ totalProducts }}</strong></div>
+      </article>
+      <article class="stat-card">
+        <span class="stat-icon" aria-hidden="true">&#9670;</span>
+        <div><h2>Active categories</h2><strong>2</strong></div>
+      </article>
+      <article class="stat-card">
+        <span class="stat-icon" aria-hidden="true">&#8962;</span>
+        <div><h2>Campus departments</h2><strong>{{ departments.length }}</strong></div>
+      </article>
+    </section>
+
+    <section class="directory-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Academic units</p>
+          <h2>Find a department</h2>
+        </div>
+        <span>{{ filteredDepartments.length }} results</span>
+      </div>
+
+      @if (filteredDepartments.length > 0) {
+        <div class="department-grid">
+          @for (department of filteredDepartments; track department.code) {
+            <article class="department-card">
+              <div class="department-badge" aria-hidden="true">{{ department.code }}</div>
+              <div class="department-card-content">
+                <span>{{ department.code }}</span>
+                <h3>{{ department.name }}</h3>
+                @if (department.code.toLowerCase() === 'chk') {
+                  <a routerLink="/chk">Open CHK Portal <span aria-hidden="true">&#8594;</span></a>
+                }
+                @else if (department.code.toLowerCase() === 'cvm') {
+                  <a routerLink="/cvm">Open CVM Portal <span aria-hidden="true">&#8594;</span></a>
+                }
+                @else if (department.code.toLowerCase() === 'cpad') {
+                  <a routerLink="/cpad">Open CPAD Portal <span aria-hidden="true">&#8594;</span></a>
+                }
+                @else if (department.code.toLowerCase() === 'col') {
+                  <a routerLink="/col">Open COL Portal <span aria-hidden="true">&#8594;</span></a>
+                }
+                @else if (department.code.toLowerCase() === 'com') {
+                  <a routerLink="/com">Open COM Portal <span aria-hidden="true">&#8594;</span></a>
+                }
+                @else if (department.code.toLowerCase()=== 'coea'){
+                  <a routerLink="/coea">Open COEA Portal <span aria-hidden="true">&#8594;</span></a>
+                }
+                @else if (department.code.toLowerCase()=== 'cnsm'){
+                  <a routerLink="/cnsm">Open CNSM Portal <span aria-hidden="true">&#8594;</span></a>
+                }
+                 @else if (department.code.toLowerCase()=== 'cit'){
+                  <a routerLink="cit">Open CIT Portal <span aria-hidden="true">&#8594;</span></a>
+                } @else {
+                  <a routerLink="/active-records" [queryParams]="{ college: department.code }">View active records <span aria-hidden="true">&#8594;</span></a>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <p class="empty-state">No matching departments found.</p>
+      }
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; 2026 Cagayan State University - Carig Campus</span>
+    <span>Maintained by Management Information System Office</span>
+  </footer>
+</ion-content>

@@ -1,0 +1,13 @@
+<ion-content [fullscreen]="true" class="admin-page">
+  <header class="admin-shell-header"><div class="admin-shell-bar"><a class="admin-brand" routerLink="/admin/dashboard">CSU Carig <span>|</span> Admin Portal</a><nav class="admin-nav"><a routerLink="/admin/dashboard">Dashboard</a><a routerLink="/admin/product">Product</a><a routerLink="/admin/necessities">Necessities</a><a class="active" routerLink="/admin/available">Available</a><a routerLink="/admin/inventory">Inventory</a></nav></div></header>
+  <main class="admin-page-content">
+    <section class="admin-hero"><p class="admin-eyebrow">Live catalog</p><h1>Available Products</h1><p>Review every product and necessity currently configured in the CSU Carig Business Office system.</p></section>
+    <section class="admin-panel"><div class="admin-panel-heading"><div><p class="admin-eyebrow">Catalog overview</p><h2>{{ products.length }} available records</h2></div><a routerLink="/admin/product">Add product</a></div>
+      <div class="catalog-grid">
+        @for (product of products; track product.title) {
+          <article class="catalog-card"><div class="catalog-image">@if (product.image) {<img [src]="product.image" [alt]="product.title" />} @else {<span>No image</span>}</div><p class="catalog-type">{{ product.type === 'necessities' ? 'Necessity' : product.college }}</p><h3>{{ product.title }}</h3><strong>{{ product.price }}</strong><span>{{ stock(product) }} units available</span></article>
+        } @empty { <p class="admin-empty">No available products found.</p> }
+      </div>
+    </section>
+  </main>
+</ion-content>
